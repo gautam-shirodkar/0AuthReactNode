@@ -19,14 +19,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/get-profile", jwtCheck, async (req, res) => {
-  const response = await fetch(
-    "https://dev-au1yfqh83pyykbbn.us.auth0.com/userinfo",
-    {
-      headers: {
-        Authorization: `Bearer ${req.auth.token}`,
-      },
-    }
-  );
+  const url = `https://${process.env.ISSUER}/userinfo`;
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${req.auth.token}`,
+    },
+  });
   const userInfo = await response.json();
   console.log(userInfo);
   res.status(200).send(userInfo);
