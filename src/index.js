@@ -1,13 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { Auth0Provider } from "@auth0/auth0-react";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import { getConfig } from "./config";
+
+const config = getConfig();
+
+// const onRedirectCallback = (appState) => {
+//   history.push(
+//     appState && appState.returnTo ? appState.returnTo : window.location.pathname
+//   );
+// };
+
+const providerConfig = {
+  domain: config.domain,
+  clientId: config.clientId,
+  authorizationParams: {
+    redirect_uri: window.location.origin,
+    ...(config.audience ? { audience: config.audience } : null),
+  },
+  scope: "openid profile email",
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <Auth0Provider {...providerConfig}>
+      <App />
+    </Auth0Provider>
   </React.StrictMode>
 );
 
